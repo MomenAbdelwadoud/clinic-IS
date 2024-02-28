@@ -12,12 +12,12 @@ import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import Link from "next/link";
 
-const Login = () => {
+const Register = () => {
 	return (
 		<div className="flex flex-col justify-center items-center min-h-screen">
 			<Card className="min-w-1/4 lg:w-1/4 min-h-[400px] flex flex-col justify-center">
 				<CardHeader>
-					<CardTitle>Login</CardTitle>
+					<CardTitle>Register</CardTitle>
 				</CardHeader>
 				<CardContent>
 					<form
@@ -38,14 +38,14 @@ const Login = () => {
 								placeholder="********"></Input>
 						</div>
 						<p>
-							don't have an account?{" "}
+							have an account?{" "}
 							<Link
-								href={"register"}
+								href={"login"}
 								className="underline">
-								register here
+								login here
 							</Link>
 						</p>
-						<Button type="submit">Login</Button>
+						<Button type="submit">Register</Button>
 					</form>
 				</CardContent>
 			</Card>
@@ -53,4 +53,4 @@ const Login = () => {
 	);
 };
 
-export default Login;
+export default Register;
