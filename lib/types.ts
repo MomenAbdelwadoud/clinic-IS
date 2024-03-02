@@ -3,7 +3,7 @@ enum userRole {
 	accountant,
 	pharmacist,
 }
-interface userData {
+type userData {
 	username: string;
 	email: string;
 	password: string;
