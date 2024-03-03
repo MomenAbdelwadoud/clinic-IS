@@ -3,11 +3,15 @@ import {pbClient} from "@/lib/db";
 import {cookies} from "next/headers";
 import React from "react";
 import DatePickerWithRange from "./DateRangePicker";
+import DataTable from "./DataTable";
 
-const Doctor = () => {
+const Doctor = async () => {
 	const pbAuth = cookies().get("pb_auth")?.value;
 	pbClient.authStore.loadFromCookie(pbAuth!);
 	const data: userData & any = pbClient.authStore.model!;
+	const patientList: patientData[] = await pbClient
+		.collection("patients")
+		.getFullList({filter: `doctor.id = '${pbClient.authStore.model?.id}'`});
 	return (
 		<div>
 			<div>
@@ -162,6 +166,9 @@ const Doctor = () => {
 						</div>
 					</CardContent>
 				</Card>
+			</div>
+			<div>
+				<DataTable props={patientList}></DataTable>
 			</div>
 		</div>
 	);
