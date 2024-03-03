@@ -4,8 +4,39 @@ import {cookies} from "next/headers";
 import React from "react";
 import DatePickerWithRange from "./DateRangePicker";
 import DataTable from "./DataTable";
+import {ColumnDef} from "@tanstack/react-table";
 
 const Doctor = async () => {
+	const columns: ColumnDef<patientData>[] = [
+		{
+			accessorKey: "name",
+			header: "Name",
+		},
+		{
+			accessorKey: "email",
+			header: "Email",
+		},
+		{
+			accessorKey: "notes",
+			header: "Notes",
+		},
+		{
+			accessorKey: "prescription",
+			header: "Prescription",
+		},
+		{
+			accessorKey: "condition",
+			header: "Condition",
+		},
+		{
+			accessorKey: "created",
+			header: "Created",
+		},
+		{
+			accessorKey: "updated",
+			header: "Updated",
+		},
+	];
 	const pbAuth = cookies().get("pb_auth")?.value;
 	pbClient.authStore.loadFromCookie(pbAuth!);
 	const data: userData & any = pbClient.authStore.model!;
@@ -167,8 +198,10 @@ const Doctor = async () => {
 					</CardContent>
 				</Card>
 			</div>
-			<div>
-				<DataTable props={patientList}></DataTable>
+			<div className="py-4">
+				<DataTable
+					data={patientList}
+					columns={columns}></DataTable>
 			</div>
 		</div>
 	);
