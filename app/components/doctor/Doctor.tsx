@@ -5,44 +5,16 @@ import React from "react";
 import DatePickerWithRange from "./DateRangePicker";
 import DataTable from "./DataTable";
 import {ColumnDef} from "@tanstack/react-table";
+import {columns} from "./columns";
 
 const Doctor = async () => {
-	const columns: ColumnDef<patientData>[] = [
-		{
-			accessorKey: "name",
-			header: "Name",
-		},
-		{
-			accessorKey: "email",
-			header: "Email",
-		},
-		{
-			accessorKey: "notes",
-			header: "Notes",
-		},
-		{
-			accessorKey: "prescription",
-			header: "Prescription",
-		},
-		{
-			accessorKey: "condition",
-			header: "Condition",
-		},
-		{
-			accessorKey: "created",
-			header: "Created",
-		},
-		{
-			accessorKey: "updated",
-			header: "Updated",
-		},
-	];
 	const pbAuth = cookies().get("pb_auth")?.value;
 	pbClient.authStore.loadFromCookie(pbAuth!);
 	const data: userData & any = pbClient.authStore.model!;
 	const patientList: patientData[] = await pbClient
 		.collection("patients")
 		.getFullList({filter: `doctor.id = '${pbClient.authStore.model?.id}'`});
+
 	return (
 		<div>
 			<div>
@@ -198,7 +170,7 @@ const Doctor = async () => {
 					</CardContent>
 				</Card>
 			</div>
-			<div className="py-4">
+			<div className="mt-8">
 				<DataTable
 					data={patientList}
 					columns={columns}></DataTable>

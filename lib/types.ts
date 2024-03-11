@@ -6,6 +6,7 @@ type userData = {
 };
 
 type patientData = {
+	id: string;
 	name: string;
 	email: string;
 	notes: string;
