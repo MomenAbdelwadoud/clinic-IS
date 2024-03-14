@@ -60,12 +60,13 @@ export const columns: ColumnDef<patientData>[] = [
 			const [dialogOpen, setDialogOpen] = useState(false);
 			const deletePatient = async (patientId: string) => {
 				try {
+					console.log(patientId);
 					await pbClient.collection("patients").delete(patientId);
+					setDialogOpen(false);
+					window.location.reload();
 				} catch (error) {
 					console.log(error);
 				}
-				setDialogOpen(false);
-				window.location.reload();
 			};
 			return (
 				<div>
