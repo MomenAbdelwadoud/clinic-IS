@@ -1,15 +1,4 @@
-"use client";
 import React from "react";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "@/components/ui/dialog";
-import {Plus} from "lucide-react";
 import {z} from "zod";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
@@ -17,7 +6,6 @@ import {Button} from "@/components/ui/button";
 import {
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
@@ -41,32 +29,17 @@ const formSchema = z.object({
 	condition: z.enum(["green", "red"]),
 	notes: z.string().min(1),
 	prescription: z.string().optional(),
-	doctor: z.any().optional(),
 });
-const NewPatient = () => {
-	return (
-		<Dialog>
-			<DialogTrigger asChild>
-				<Button>
-					<Plus className="mr-2 h-4 w-4" />
-					New Patient
-				</Button>
-			</DialogTrigger>
-			<DialogContent>
-				<DialogHeader>
-					<DialogTitle>Add New Patient</DialogTitle>
-				</DialogHeader>
-				<NewPatientForm></NewPatientForm>
-			</DialogContent>
-		</Dialog>
-	);
-};
 
-const NewPatientForm = () => {
+const UpdatePatientForm = ({patientData}: {patientData: patientData}) => {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			name: "",
+			name: patientData.name,
+			email: patientData.email,
+			condition: patientData.condition,
+			notes: patientData.notes,
+			prescription: patientData.prescription,
 		},
 	});
 	async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -74,9 +47,7 @@ const NewPatientForm = () => {
 		try {
 			const pbAuth = Cookies.get("pb_auth");
 			pbClient.authStore.loadFromCookie(pbAuth!);
-			const currentDoctorId = pbClient.authStore.model?.id;
-			values = {...values, doctor: currentDoctorId};
-			await pbClient.collection("patients").create(values);
+			await pbClient.collection("patients").update(patientData.id, values);
 			window.location.reload();
 		} catch (error) {
 			console.log(error);
@@ -85,7 +56,7 @@ const NewPatientForm = () => {
 	return (
 		<Form {...form}>
 			<form
-				id="new-patient"
+				id="update-patient"
 				onSubmit={form.handleSubmit(onSubmit)}
 				className="space-y-8">
 				<FormField
@@ -187,12 +158,12 @@ const NewPatientForm = () => {
 				/>
 				<Button
 					type="submit"
-					form="new-patient">
-					Add
+					form="update-patient">
+					Edit
 				</Button>
 			</form>
 		</Form>
 	);
 };
 
-export default NewPatient;
+export default UpdatePatientForm;

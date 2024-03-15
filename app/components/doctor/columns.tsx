@@ -1,6 +1,6 @@
 "use client";
 import {ColumnDef} from "@tanstack/react-table";
-import {MoreHorizontal} from "lucide-react";
+import {MoreHorizontal, X} from "lucide-react";
 
 import {Button} from "@/components/ui/button";
 import {
@@ -23,6 +23,17 @@ import {
 } from "@/components/ui/alert-dialog";
 import {useState} from "react";
 import {pbClient} from "@/lib/db";
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
+import UpdatePatientForm from "./UpdatePatientForm";
 
 export const columns: ColumnDef<patientData>[] = [
 	{
@@ -57,12 +68,13 @@ export const columns: ColumnDef<patientData>[] = [
 		id: "actions",
 		cell: ({row}) => {
 			const patient = row.original;
-			const [dialogOpen, setDialogOpen] = useState(false);
+			const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+			const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
 			const deletePatient = async (patientId: string) => {
 				try {
 					console.log(patientId);
 					await pbClient.collection("patients").delete(patientId);
-					setDialogOpen(false);
+					setDeleteDialogOpen(false);
 					window.location.reload();
 				} catch (error) {
 					console.log(error);
@@ -80,15 +92,17 @@ export const columns: ColumnDef<patientData>[] = [
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="end">
 							<DropdownMenuLabel>Actions</DropdownMenuLabel>
-							<DropdownMenuItem>Edit</DropdownMenuItem>
+							<DropdownMenuItem onClick={() => setUpdateDialogOpen(true)}>
+								Edit
+							</DropdownMenuItem>
 							<DropdownMenuItem
 								className="text-red-500"
-								onClick={() => setDialogOpen(true)}>
+								onClick={() => setDeleteDialogOpen(true)}>
 								<p className="text-red-500">Delete</p>
 							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
-					<AlertDialog open={dialogOpen}>
+					<AlertDialog open={deleteDialogOpen}>
 						<AlertDialogContent>
 							<AlertDialogHeader>
 								<AlertDialogTitle>
@@ -101,7 +115,8 @@ export const columns: ColumnDef<patientData>[] = [
 								</AlertDialogDescription>
 							</AlertDialogHeader>
 							<AlertDialogFooter>
-								<AlertDialogCancel onClick={() => setDialogOpen(false)}>
+								<AlertDialogCancel
+									onClick={() => setDeleteDialogOpen(false)}>
 									Cancel
 								</AlertDialogCancel>
 								<AlertDialogAction
@@ -110,6 +125,17 @@ export const columns: ColumnDef<patientData>[] = [
 									Delete
 								</AlertDialogAction>
 							</AlertDialogFooter>
+						</AlertDialogContent>
+					</AlertDialog>
+					<AlertDialog open={updateDialogOpen}>
+						<AlertDialogContent>
+							<AlertDialogHeader className="flex justify-between items-center flex-row">
+								<AlertDialogTitle>Edit Patient</AlertDialogTitle>
+								<X
+									onClick={() => setUpdateDialogOpen(false)}
+									className="h-5 w-5 cursor-pointer"></X>
+							</AlertDialogHeader>
+							<UpdatePatientForm patientData={patient}></UpdatePatientForm>
 						</AlertDialogContent>
 					</AlertDialog>
 				</div>
