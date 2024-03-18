@@ -12,7 +12,7 @@ import {AlertCircle, Cross, Plus, UserPlus, Users} from "lucide-react";
 const Doctor = async () => {
 	const pbAuth = cookies().get("pb_auth")?.value;
 	pbClient.authStore.loadFromCookie(pbAuth!);
-	const data: userData & any = pbClient.authStore.model!;
+	const currentUser: userData & any = pbClient.authStore.model!;
 	const patientList: patientData[] = await pbClient
 		.collection("patients")
 		.getFullList({filter: `doctor.id = '${pbClient.authStore.model?.id}'`});
@@ -21,7 +21,7 @@ const Doctor = async () => {
 		<div>
 			<div>
 				<h1 className="text-2xl font-bold">
-					Welcome back Dr {JSON.stringify(data.username)}
+					Welcome back Dr {JSON.stringify(currentUser.username)}
 				</h1>
 				<h4 className="text-sm text-gray-800">
 					Here is a summary of your patients
