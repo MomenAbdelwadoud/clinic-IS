@@ -1,5 +1,6 @@
 "use client";
 import {ColumnDef} from "@tanstack/react-table";
+import {patientData} from "@/lib/types";
 
 export const columns: ColumnDef<patientData>[] = [
 	{

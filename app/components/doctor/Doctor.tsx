@@ -8,6 +8,7 @@ import {ColumnDef} from "@tanstack/react-table";
 import {columns} from "./columns";
 import NewPatient from "../accountant/NewPatient";
 import {AlertCircle, Cross, Plus, UserPlus, Users} from "lucide-react";
+import {userData, patientData} from "@/lib/types";
 
 const Doctor = async () => {
 	const pbAuth = cookies().get("pb_auth")?.value;

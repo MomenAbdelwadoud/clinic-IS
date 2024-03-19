@@ -1,11 +1,11 @@
-type userData = {
+export type userData = {
 	username: string;
 	email: string;
 	password: string;
 	role: "doctor" | "accountant" | "pharmacist";
 };
 
-type patientData = {
+export type patientData = {
 	id: string;
 	name: string;
 	email: string;
@@ -16,4 +16,4 @@ type patientData = {
 	updated: DateTime;
 };
 
-const cost = 12.2;
+export const appointmentRevenue = 12.2;

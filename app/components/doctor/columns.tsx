@@ -34,6 +34,7 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import UpdatePatientForm from "./UpdatePatientForm";
+import {patientData} from "@/lib/types";
 
 export const columns: ColumnDef<patientData>[] = [
 	{

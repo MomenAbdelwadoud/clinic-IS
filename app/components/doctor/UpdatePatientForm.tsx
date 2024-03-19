@@ -22,6 +22,7 @@ import {
 import {Textarea} from "@/components/ui/textarea";
 import {pbClient} from "@/lib/db";
 import Cookies from "js-cookie";
+import {patientData} from "@/lib/types";
 
 const formSchema = z.object({
 	name: z.string().min(2).max(50),
