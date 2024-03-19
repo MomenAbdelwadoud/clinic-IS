@@ -6,7 +6,7 @@ import DatePickerWithRange from "./DateRangePicker";
 import DataTable from "./DataTable";
 import {ColumnDef} from "@tanstack/react-table";
 import {columns} from "./columns";
-import NewPatient from "./NewPatient";
+import NewPatient from "../accountant/NewPatient";
 import {AlertCircle, Cross, Plus, UserPlus, Users} from "lucide-react";
 
 const Doctor = async () => {
@@ -29,7 +29,6 @@ const Doctor = async () => {
 			</div>
 			<div className="pt-12 flex justify-between">
 				<DatePickerWithRange></DatePickerWithRange>
-				<NewPatient></NewPatient>
 			</div>
 			<div className="pt-4 flex gap-5 xl:gap-16 flex-wrap">
 				<Card className="flex flex-col border-[1px]shadow-sm max-w-[300px] rounded-xl min-w-[250px]">

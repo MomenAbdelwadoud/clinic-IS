@@ -15,3 +15,5 @@ type patientData = {
 	created: DateTime;
 	updated: DateTime;
 };
+
+const cost = 12.2;

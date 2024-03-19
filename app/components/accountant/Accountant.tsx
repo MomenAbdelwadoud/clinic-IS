@@ -4,7 +4,9 @@ import {UserPlus, Users} from "lucide-react";
 import {cookies} from "next/headers";
 import React from "react";
 import DatePickerWithRange from "../doctor/DateRangePicker";
-import NewPatient from "../doctor/NewPatient";
+import NewPatient from "./NewPatient";
+import DataTable from "./DataTable";
+import {columns} from "./columns";
 
 const Accountant = async () => {
 	const pbAuth = cookies().get("pb_auth")?.value;
@@ -12,7 +14,7 @@ const Accountant = async () => {
 	const currentUser: userData & any = pbClient.authStore.model!;
 	const patientList: patientData[] = await pbClient
 		.collection("patients")
-		.getFullList({filter: `patient.created > '${new Date().toISOString()}'`});
+		.getFullList();
 
 	return (
 		<div>
@@ -21,7 +23,7 @@ const Accountant = async () => {
 					Welcome back {JSON.stringify(currentUser.username)}
 				</h1>
 				<h4 className="text-sm text-gray-800">
-					Here is a summary of your patients
+					Here is a summary the appointments
 				</h4>
 			</div>
 			<div className="pt-12 flex justify-between">
@@ -52,6 +54,11 @@ const Accountant = async () => {
 						<p className="text-2xl font-bold">56</p>
 					</CardContent>
 				</Card>
+			</div>
+			<div className="mt-8">
+				<DataTable
+					data={patientList}
+					columns={columns}></DataTable>
 			</div>
 		</div>
 	);

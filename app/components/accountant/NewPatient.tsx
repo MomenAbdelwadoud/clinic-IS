@@ -96,7 +96,7 @@ const NewPatientForm = () => {
 							<FormLabel>Name</FormLabel>
 							<FormControl>
 								<Input
-									placeholder="John Doe"
+									placeholder="JohnDoe"
 									{...field}
 								/>
 							</FormControl>
