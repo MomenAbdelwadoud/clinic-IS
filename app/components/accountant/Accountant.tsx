@@ -8,14 +8,20 @@ import NewPatient from "./NewPatient";
 import DataTable from "./DataTable";
 import {columns} from "./columns";
 import {appointmentRevenue, patientData, userData} from "@/lib/types";
+import {GET_PATIENTS_URL} from "@/lib/urls";
 
 const Accountant = async () => {
 	const pbAuth = cookies().get("pb_auth")?.value;
 	pbClient.authStore.loadFromCookie(pbAuth!);
 	const currentUser: userData & any = pbClient.authStore.model!;
-	const patientList: patientData[] = await pbClient
-		.collection("patients")
-		.getFullList();
+	const res = await fetch(process.env.NEXT_PUBLIC_PB_URL + GET_PATIENTS_URL, {
+		next: {tags: ["patients"]},
+		headers: {
+			Authorization: pbClient.authStore.token,
+		},
+	});
+	const result = await res.json();
+	const patientList: patientData[] = result.items;
 	const totalRevenue = patientList.length * appointmentRevenue;
 
 	return (

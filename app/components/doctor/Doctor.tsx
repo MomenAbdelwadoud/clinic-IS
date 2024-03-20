@@ -9,14 +9,28 @@ import {columns} from "./columns";
 import NewPatient from "../accountant/NewPatient";
 import {AlertCircle, Cross, Plus, UserPlus, Users} from "lucide-react";
 import {userData, patientData} from "@/lib/types";
+import {GET_PATIENTS_URL} from "@/lib/urls";
 
 const Doctor = async () => {
 	const pbAuth = cookies().get("pb_auth")?.value;
 	pbClient.authStore.loadFromCookie(pbAuth!);
 	const currentUser: userData & any = pbClient.authStore.model!;
-	const patientList: patientData[] = await pbClient
-		.collection("patients")
-		.getFullList({filter: `doctor.id = '${pbClient.authStore.model?.id}'`});
+	// const patientList: patientData[] = await pbClient
+	// 	.collection("patients")
+	// 	.getFullList({filter: `doctor.id = '${pbClient.authStore.model?.id}'`});
+	const res = await fetch(
+		process.env.NEXT_PUBLIC_PB_URL +
+			GET_PATIENTS_URL +
+			`?filter=doctor.id = '${pbClient.authStore.model?.id}'`,
+		{
+			next: {tags: ["patients"]},
+			headers: {
+				Authorization: pbClient.authStore.token,
+			},
+		}
+	);
+	const result = await res.json();
+	const patientList: patientData[] = result.items;
 
 	return (
 		<div>
@@ -41,20 +55,7 @@ const Doctor = async () => {
 					</CardHeader>
 					<CardContent className="flex flex-col items-start">
 						<div className="w-full flex justify-center">
-							<p className="text-2xl font-bold">24</p>
-						</div>
-					</CardContent>
-				</Card>
-				<Card className="flex flex-col border-[1px]shadow-sm max-w-[300px] rounded-xl min-w-[250px]">
-					<CardHeader className="flex flex-row items-baseline justify-between w-full">
-						<CardTitle className="text-md font-medium">
-							Total Patients
-						</CardTitle>
-						<Users className="w-5 h-5"></Users>
-					</CardHeader>
-					<CardContent className="flex flex-col items-start">
-						<div className="w-full flex justify-center">
-							<p className="text-2xl font-bold">56</p>
+							<p className="text-2xl font-bold">{patientList.length}</p>
 						</div>
 					</CardContent>
 				</Card>
@@ -67,7 +68,9 @@ const Doctor = async () => {
 					</CardHeader>
 					<CardContent className="flex flex-col items-start">
 						<div className="w-full flex justify-center">
-							<p className="text-2xl font-bold">56</p>
+							<p className="text-2xl font-bold">
+								{patientList.filter(p => p.condition == "red").length}
+							</p>
 						</div>
 					</CardContent>
 				</Card>
@@ -80,7 +83,9 @@ const Doctor = async () => {
 					</CardHeader>
 					<CardContent className="flex flex-col items-start">
 						<div className="w-full flex justify-center">
-							<p className="text-2xl font-bold">56</p>
+							<p className="text-2xl font-bold">
+								{patientList.filter(p => p.condition == "green").length}
+							</p>
 						</div>
 					</CardContent>
 				</Card>
