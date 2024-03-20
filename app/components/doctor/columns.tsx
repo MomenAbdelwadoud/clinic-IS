@@ -23,16 +23,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import {useState} from "react";
 import {pbClient} from "@/lib/db";
-import {
-	Dialog,
-	DialogClose,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "@/components/ui/dialog";
 import UpdatePatientForm from "./UpdatePatientForm";
 import {patientData} from "@/lib/types";
 
@@ -48,10 +38,26 @@ export const columns: ColumnDef<patientData>[] = [
 	{
 		accessorKey: "notes",
 		header: "Notes",
+		cell: ({row}) => {
+			const patient = row.original;
+			return (
+				<div className="max-w-xs truncate">
+					{patient.notes ? patient.notes : "No notes"}
+				</div>
+			);
+		},
 	},
 	{
 		accessorKey: "prescription",
 		header: "Prescription",
+		cell: ({row}) => {
+			const patient = row.original;
+			return (
+				<div className="max-w-xs truncate">
+					{patient.prescription ? patient.prescription : "No prescription"}
+				</div>
+			);
+		},
 	},
 	{
 		accessorKey: "condition",
