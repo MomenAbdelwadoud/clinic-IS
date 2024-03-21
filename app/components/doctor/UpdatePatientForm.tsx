@@ -22,7 +22,7 @@ import {
 import {Textarea} from "@/components/ui/textarea";
 import {pbClient} from "@/lib/db";
 import Cookies from "js-cookie";
-import {patientData} from "@/lib/types";
+import {patientType} from "@/lib/types";
 
 const formSchema = z.object({
 	name: z.string().min(2).max(50),
@@ -32,7 +32,7 @@ const formSchema = z.object({
 	prescription: z.string().optional(),
 });
 
-const UpdatePatientForm = ({patientData}: {patientData: patientData}) => {
+const UpdatePatientForm = ({patientData}: {patientData: patientType}) => {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {

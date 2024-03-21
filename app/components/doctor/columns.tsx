@@ -24,9 +24,9 @@ import {
 import {useState} from "react";
 import {pbClient} from "@/lib/db";
 import UpdatePatientForm from "./UpdatePatientForm";
-import {patientData} from "@/lib/types";
+import {patientType} from "@/lib/types";
 
-export const columns: ColumnDef<patientData>[] = [
+export const columns: ColumnDef<patientType>[] = [
 	{
 		accessorKey: "name",
 		header: "Name",

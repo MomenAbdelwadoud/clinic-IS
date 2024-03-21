@@ -1,11 +1,11 @@
-export type userData = {
+export type userType = {
 	username: string;
 	email: string;
 	password: string;
 	role: "doctor" | "accountant" | "pharmacist";
 };
 
-export type patientData = {
+export type patientType = {
 	id: string;
 	name: string;
 	email: string;

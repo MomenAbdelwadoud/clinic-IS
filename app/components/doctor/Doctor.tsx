@@ -2,26 +2,26 @@ import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {pbClient} from "@/lib/db";
 import {cookies} from "next/headers";
 import React from "react";
-import DatePickerWithRange from "./DateRangePicker";
+import DatePickerWithRange from "../DateRangePicker";
 import DataTable from "./DataTable";
-import {ColumnDef} from "@tanstack/react-table";
 import {columns} from "./columns";
-import NewPatient from "../accountant/NewPatient";
 import {AlertCircle, Cross, Plus, UserPlus, Users} from "lucide-react";
-import {userData, patientData} from "@/lib/types";
+import {userType, patientType} from "@/lib/types";
 import {GET_PATIENTS_URL} from "@/lib/urls";
+import {toDateFormat} from "@/lib/toDateFormat";
 
-const Doctor = async () => {
+const Doctor = async ({from, to}: {from: Date; to: Date}) => {
 	const pbAuth = cookies().get("pb_auth")?.value;
 	pbClient.authStore.loadFromCookie(pbAuth!);
-	const currentUser: userData & any = pbClient.authStore.model!;
-	// const patientList: patientData[] = await pbClient
-	// 	.collection("patients")
-	// 	.getFullList({filter: `doctor.id = '${pbClient.authStore.model?.id}'`});
+	const currentUser: userType & any = pbClient.authStore.model!;
+	const {from: formattedFrom, to: formattedTo} = toDateFormat(
+		from.toString(),
+		to.toString()
+	);
 	const res = await fetch(
 		process.env.NEXT_PUBLIC_PB_URL +
 			GET_PATIENTS_URL +
-			`?filter=doctor.id = '${pbClient.authStore.model?.id}'`,
+			`?filter=doctor.id = '${pbClient.authStore.model?.id}'%26%26created>='${formattedFrom}'%26%26created<='${formattedTo}'`,
 		{
 			next: {tags: ["patients"]},
 			headers: {
@@ -30,7 +30,7 @@ const Doctor = async () => {
 		}
 	);
 	const result = await res.json();
-	const patientList: patientData[] = result.items;
+	const patientList: patientType[] = result.items;
 
 	return (
 		<div>
@@ -43,7 +43,9 @@ const Doctor = async () => {
 				</h4>
 			</div>
 			<div className="pt-12 flex justify-between">
-				<DatePickerWithRange></DatePickerWithRange>
+				<DatePickerWithRange
+					from={from}
+					to={to}></DatePickerWithRange>
 			</div>
 			<div className="pt-4 flex gap-5 xl:gap-16 flex-wrap">
 				<Card className="flex flex-col border-[1px]shadow-sm max-w-[300px] rounded-xl min-w-[250px]">
@@ -55,7 +57,7 @@ const Doctor = async () => {
 					</CardHeader>
 					<CardContent className="flex flex-col items-start">
 						<div className="w-full flex justify-center">
-							<p className="text-2xl font-bold">{patientList.length}</p>
+							<p className="text-2xl font-bold">{patientList?.length}</p>
 						</div>
 					</CardContent>
 				</Card>
@@ -69,7 +71,7 @@ const Doctor = async () => {
 					<CardContent className="flex flex-col items-start">
 						<div className="w-full flex justify-center">
 							<p className="text-2xl font-bold">
-								{patientList.filter(p => p.condition == "red").length}
+								{patientList?.filter(p => p.condition == "red").length}
 							</p>
 						</div>
 					</CardContent>
@@ -84,16 +86,20 @@ const Doctor = async () => {
 					<CardContent className="flex flex-col items-start">
 						<div className="w-full flex justify-center">
 							<p className="text-2xl font-bold">
-								{patientList.filter(p => p.condition == "green").length}
+								{patientList?.filter(p => p.condition == "green").length}
 							</p>
 						</div>
 					</CardContent>
 				</Card>
 			</div>
 			<div className="mt-8">
-				<DataTable
-					data={patientList}
-					columns={columns}></DataTable>
+				{patientList ? (
+					<DataTable
+						data={patientList}
+						columns={columns}></DataTable>
+				) : (
+					<p>No patient found</p>
+				)}
 			</div>
 		</div>
 	);

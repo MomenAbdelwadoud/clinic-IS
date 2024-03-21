@@ -1,5 +1,6 @@
 import {faker} from "@faker-js/faker";
 import {pbClient} from "./db";
+import {patientType} from "./types";
 
 const countArg = process.argv[2];
 const count = Number(countArg);
@@ -17,7 +18,7 @@ const getFirstDoctor = async (): Promise<any> => {
 };
 
 const doctor = await getFirstDoctor();
-const generateRandomPatient = (): patientData & any => {
+const generateRandomPatient = (): patientType & any => {
 	const patientData = {
 		name: faker.person.firstName(),
 		email: faker.internet.email(),

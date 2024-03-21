@@ -1,8 +1,8 @@
 "use client";
 import {ColumnDef} from "@tanstack/react-table";
-import {patientData} from "@/lib/types";
+import {patientType} from "@/lib/types";
 
-export const columns: ColumnDef<patientData>[] = [
+export const columns: ColumnDef<patientType>[] = [
 	{
 		accessorKey: "name",
 		header: "Name",

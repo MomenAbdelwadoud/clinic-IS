@@ -9,14 +9,45 @@ import {cn} from "@/lib/utils";
 import {Button} from "@/components/ui/button";
 import {Calendar} from "@/components/ui/calendar";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
+import {useEffect} from "react";
 
 export default function DatePickerWithRange({
 	className,
-}: React.HTMLAttributes<HTMLDivElement>) {
-	const [date, setDate] = React.useState<DateRange | undefined>({
-		from: new Date(2024, 0, 20),
-		to: addDays(new Date(2024, 0, 20), 30),
-	});
+	from,
+	to,
+}: {
+	className?: React.HTMLAttributes<HTMLDivElement>;
+	from: Date;
+	to: Date;
+}) {
+	const [date, setDate] = React.useState<DateRange | undefined>({from, to});
+
+	// Persistent date state
+	useEffect(() => {
+		const date = window.localStorage.getItem("date");
+		try {
+			if (date !== null && date !== undefined) setDate(JSON.parse(date));
+		} catch (error) {
+			console.log(error);
+		}
+	}, []);
+	useEffect(() => {
+		window.localStorage.setItem("date", JSON.stringify(date));
+	}, [date]);
+	const updateParams = (newDate: DateRange) => {
+		window.localStorage.setItem("date", JSON.stringify(newDate));
+		let searchParams = new URLSearchParams(window.location.search);
+		try {
+			searchParams.set(
+				"from",
+				newDate.from?.toString() ? newDate.from.toString() : ""
+			);
+			searchParams.set("to", newDate.to?.toString() ? newDate.to.toString() : "");
+		} catch (error) {
+			console.log(error);
+		}
+		window.location.search = searchParams.toString();
+	};
 
 	return (
 		<div className={cn("grid gap-2", className)}>
@@ -52,7 +83,7 @@ export default function DatePickerWithRange({
 						mode="range"
 						defaultMonth={date?.from}
 						selected={date}
-						onSelect={setDate}
+						onSelect={newDate => updateParams(newDate as DateRange)}
 						numberOfMonths={2}
 					/>
 				</PopoverContent>

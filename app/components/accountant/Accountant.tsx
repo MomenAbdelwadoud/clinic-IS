@@ -3,17 +3,17 @@ import {pbClient} from "@/lib/db";
 import {DollarSign, UserPlus, Users} from "lucide-react";
 import {cookies} from "next/headers";
 import React from "react";
-import DatePickerWithRange from "../doctor/DateRangePicker";
+import DatePickerWithRange from "../DateRangePicker";
 import NewPatient from "./NewPatient";
 import DataTable from "./DataTable";
 import {columns} from "./columns";
-import {appointmentRevenue, patientData, userData} from "@/lib/types";
+import {appointmentRevenue, patientType, userType} from "@/lib/types";
 import {GET_PATIENTS_URL} from "@/lib/urls";
 
-const Accountant = async () => {
+const Accountant = async ({from, to}: {from: Date; to: Date}) => {
 	const pbAuth = cookies().get("pb_auth")?.value;
 	pbClient.authStore.loadFromCookie(pbAuth!);
-	const currentUser: userData & any = pbClient.authStore.model!;
+	const currentUser: userType & any = pbClient.authStore.model!;
 	const res = await fetch(process.env.NEXT_PUBLIC_PB_URL + GET_PATIENTS_URL, {
 		next: {tags: ["patients"]},
 		headers: {
@@ -21,7 +21,7 @@ const Accountant = async () => {
 		},
 	});
 	const result = await res.json();
-	const patientList: patientData[] = result.items;
+	const patientList: patientType[] = result.items;
 	const totalRevenue = patientList.length * appointmentRevenue;
 
 	return (
@@ -35,7 +35,9 @@ const Accountant = async () => {
 				</h4>
 			</div>
 			<div className="pt-12 flex justify-between">
-				<DatePickerWithRange></DatePickerWithRange>
+				<DatePickerWithRange
+					from={from}
+					to={to}></DatePickerWithRange>
 				<NewPatient></NewPatient>
 			</div>
 			<div className="pt-4 flex gap-5 xl:gap-16 flex-wrap">
