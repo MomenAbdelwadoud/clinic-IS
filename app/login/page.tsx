@@ -1,6 +1,3 @@
-import {pbClient} from "@/lib/db";
-import {cookies} from "next/headers";
-import {redirect} from "next/navigation";
 import {LoginForm} from "./Form";
 
 const Login = () => {

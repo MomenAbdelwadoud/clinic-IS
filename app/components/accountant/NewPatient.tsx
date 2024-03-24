@@ -1,23 +1,15 @@
 "use client";
-import React from "react";
+import {Button} from "@/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
-	DialogDescription,
-	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import {Plus} from "lucide-react";
-import {z} from "zod";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {useForm} from "react-hook-form";
-import {Button} from "@/components/ui/button";
 import {
 	Form,
 	FormControl,
-	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
@@ -26,14 +18,18 @@ import {
 import {Input} from "@/components/ui/input";
 import {
 	Select,
-	SelectTrigger,
-	SelectValue,
 	SelectContent,
 	SelectItem,
+	SelectTrigger,
+	SelectValue,
 } from "@/components/ui/select";
 import {Textarea} from "@/components/ui/textarea";
 import {pbClient} from "@/lib/db";
+import {zodResolver} from "@hookform/resolvers/zod";
 import Cookies from "js-cookie";
+import {Plus} from "lucide-react";
+import {useForm} from "react-hook-form";
+import {z} from "zod";
 
 const formSchema = z.object({
 	name: z.string().min(2).max(50),

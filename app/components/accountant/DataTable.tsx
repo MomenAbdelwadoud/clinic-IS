@@ -1,12 +1,5 @@
 "use client";
-import React from "react";
-import {
-	ColumnDef,
-	flexRender,
-	getCoreRowModel,
-	getPaginationRowModel,
-	useReactTable,
-} from "@tanstack/react-table";
+import {Button} from "@/components/ui/button";
 import {
 	Table,
 	TableBody,
@@ -15,7 +8,13 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import {Button} from "@/components/ui/button";
+import {
+	ColumnDef,
+	flexRender,
+	getCoreRowModel,
+	getPaginationRowModel,
+	useReactTable,
+} from "@tanstack/react-table";
 
 export default function DataTable<TData, TValue>({
 	columns,
