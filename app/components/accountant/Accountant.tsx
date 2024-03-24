@@ -9,17 +9,27 @@ import DataTable from "./DataTable";
 import {columns} from "./columns";
 import {appointmentRevenue, patientType, userType} from "@/lib/types";
 import {GET_PATIENTS_URL} from "@/lib/urls";
+import {toDateFormat} from "@/lib/toDateFormat";
 
 const Accountant = async ({from, to}: {from: Date; to: Date}) => {
 	const pbAuth = cookies().get("pb_auth")?.value;
 	pbClient.authStore.loadFromCookie(pbAuth!);
 	const currentUser: userType & any = pbClient.authStore.model!;
-	const res = await fetch(process.env.NEXT_PUBLIC_PB_URL + GET_PATIENTS_URL, {
-		next: {tags: ["patients"]},
-		headers: {
-			Authorization: pbClient.authStore.token,
-		},
-	});
+	const {from: formattedFrom, to: formattedTo} = toDateFormat(
+		from.toString(),
+		to.toString()
+	);
+	const res = await fetch(
+		process.env.NEXT_PUBLIC_PB_URL +
+			GET_PATIENTS_URL +
+			`?filter=created>='${formattedFrom}'%26%26created<='${formattedTo}'`,
+		{
+			next: {tags: ["patients"]},
+			headers: {
+				Authorization: pbClient.authStore.token,
+			},
+		}
+	);
 	const result = await res.json();
 	const patientList: patientType[] = result.items;
 	const totalRevenue = patientList.length * appointmentRevenue;

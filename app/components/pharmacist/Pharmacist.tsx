@@ -8,13 +8,20 @@ import {GET_PATIENTS_URL} from "@/lib/urls";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {pbClient} from "@/lib/db";
 import {cookies} from "next/headers";
+import {toDateFormat} from "@/lib/toDateFormat";
 
 const Pharmacist = async ({from, to}: {from: Date; to: Date}) => {
 	const pbAuth = cookies().get("pb_auth")?.value;
 	pbClient.authStore.loadFromCookie(pbAuth!);
 	const currentUser: userType & any = pbClient.authStore.model!;
+	const {from: formattedFrom, to: formattedTo} = toDateFormat(
+		from.toString(),
+		to.toString()
+	);
 	const res = await fetch(
-		process.env.NEXT_PUBLIC_PB_URL + GET_PATIENTS_URL + `?filter=prescription != ''`,
+		process.env.NEXT_PUBLIC_PB_URL +
+			GET_PATIENTS_URL +
+			`?filter=prescription != ''%26%26created>='${formattedFrom}'%26%26created<='${formattedTo}'`,
 		{
 			next: {tags: ["patients"]},
 			headers: {
